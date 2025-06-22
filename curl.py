@@ -153,6 +153,20 @@ def calculate_chunk_info(chunk_length):
 def download_tif(lat, tile, interval, outfolder, outfile):
     username = "glad"
     password = "ardpas"
+import rasterio
+import numpy as np
+from pathlib import Path
+from imageio import imwrite   # or from PIL import Image
+
+def download_tif(lat, tile, interval):
+    username = "glad"
+    password = "ardpas"
+
+    lat = "13N"  # example
+    tile = "105E_13N"
+    interval = "920"
+    outfolder = "/Users/anikait/Downloads"
+    outfile = f"{outfolder}/{interval}.tif"
 
     url = f"https://glad.umd.edu/dataset/glad_ard2/{lat}/{tile}/{interval}.tif"
 
