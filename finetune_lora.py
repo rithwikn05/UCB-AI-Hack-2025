@@ -21,66 +21,6 @@ def check_gpu_availability():
         print("✗ CUDA not available - training will be very slow!")
         return False
 
-def mount_gcs_bucket(bucket_name, mount_point, bucket_path=""):
-    """Mount GCS bucket using gcsfuse with optimizations for ML workloads"""
-    try:
-        os.makedirs(mount_point, exist_ok=True)
-        
-        # Check if already mounted
-        result = subprocess.run(['mountpoint', mount_point], capture_output=True)
-        if result.returncode == 0:
-            print(f"✓ Bucket already mounted at {mount_point}")
-            return os.path.join(mount_point, bucket_path) if bucket_path else mount_point
-        
-        # Optimized gcsfuse options for ML training
-        mount_command = [
-            "gcsfuse",
-            "--implicit-dirs",
-            "--file-mode", "644",
-            "--dir-mode", "755",
-            "--cache-type", "stat",  # Cache file stats for better performance
-            "--stat-cache-ttl", "1h",
-            "--type-cache-ttl", "1h",
-            "--max-conns-per-host", "10",  # More connections for parallel access
-            "--max-idle-conns-per-host", "100",
-            bucket_name,
-            mount_point
-        ]
-        
-        print(f"🔄 Mounting gs://{bucket_name} to {mount_point}")
-        result = subprocess.run(mount_command, capture_output=True, text=True)
-        
-        if result.returncode == 0:
-            print("✓ Mount successful!")
-            full_path = os.path.join(mount_point, bucket_path) if bucket_path else mount_point
-            
-            # Verify the path exists and has files
-            if os.path.exists(full_path):
-                file_count = len([f for f in os.listdir(full_path) if f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp'))])
-                print(f"✓ Found {file_count} image files in {full_path}")
-                return full_path
-            else:
-                print(f"⚠️  Path {full_path} not found, using mount root")
-                return mount_point
-        else:
-            print(f"✗ Mount failed: {result.stderr}")
-            return None
-            
-    except Exception as e:
-        print(f"✗ Error mounting GCS bucket: {e}")
-        return None
-
-def unmount_gcs_bucket(mount_point):
-    """Unmount GCS bucket"""
-    try:
-        print(f"🔄 Unmounting {mount_point}")
-        result = subprocess.run(["fusermount", "-u", mount_point], capture_output=True)
-        if result.returncode != 0:
-            subprocess.run(["umount", mount_point], capture_output=True)
-        print("✓ Unmount completed")
-    except Exception as e:
-        print(f"⚠️  Unmount error: {e}")
-
 def optimize_training_params(gpu_count, gpu_memory_gb):
     """Optimize training parameters based on available GPU resources"""
     if gpu_memory_gb >= 24:  # RTX 4090, A100, etc.
@@ -125,7 +65,6 @@ if __name__ == "__main__":
     # Configuration - UPDATE THESE VALUES!
     GCS_BUCKET_NAME = "your-bucket-name"  # ← CHANGE THIS to your actual bucket name
     GCS_BUCKET_PATH = "test_images"  # ← CHANGE THIS - trains on 880x550 resolution images
-    MOUNT_POINT = "/tmp/gcs_training_data"
     
     # Get GPU info for optimization
     gpu_memory_gb = 0
@@ -138,7 +77,6 @@ if __name__ == "__main__":
     params = optimize_training_params(gpu_count, gpu_memory_gb)
     print(f"📊 Optimized settings: {params}")
     
-    mounted_path = None
     try:
         # Authenticate with Hugging Face
         # HF_TOKEN = "hf_your_token_here"  # ← REPLACE with your actual HF token
@@ -153,13 +91,7 @@ if __name__ == "__main__":
             local_dir="./models/qwen2vl-flux",
             token=hf_token  # Pass token explicitly
         )
-        
-        # Mount GCS bucket
-        # mounted_path = mount_gcs_bucket(GCS_BUCKET_NAME, MOUNT_POINT, GCS_BUCKET_PATH)
-        # if not mounted_path:
-        #     print("✗ Failed to mount GCS bucket")
-        #     sys.exit(1)
-        
+    
         # Paths
         PRETRAINED_MODEL = "./models/qwen2vl-flux"
         IMAGE_FOLDER = "/test_images"
@@ -245,7 +177,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n💥 Error during training: {e}")
     finally:
-        # Cleanup
-        # if mounted_path:
-        #     unmount_gcs_bucket(MOUNT_POINT)
         print("🧹 Cleanup completed")

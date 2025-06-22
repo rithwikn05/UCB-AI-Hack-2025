@@ -4,6 +4,7 @@ import base64
 import os
 from pathlib import Path
 import replicate
+import requests
 
 app = FastAPI()
 
@@ -30,7 +31,6 @@ async def generate_sd_image(prompt: str) -> bytes:
         img_bytes = first_item.read()
     else:
         # item is URL string: download
-        import requests
         img_bytes = requests.get(first_item).content
     return img_bytes
 

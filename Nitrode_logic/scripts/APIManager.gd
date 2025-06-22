@@ -134,4 +134,5 @@ func _on_request_completed(result, response_code, _headers, body):
 		push_warning("[APIManager] Failed to decode PNG buffer: %s" % img_err)
 		return
 	var tex = ImageTexture.create_from_image(img)
-	emit_signal("image_generated", data["tile_index"], tex) 
+	emit_signal("image_generated", data["tile_index"], tex)
+	print("[APIManager] HTTP code =", response_code) 

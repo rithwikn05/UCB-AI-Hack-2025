@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Echoes of Earth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f4f7;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        #image-space {
+            width: 80%;
+            height: auto;
+            min-height: 400px;
+            margin: 20px auto;
+            background: #e1e8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #95a5a6;
+        }
+
+        #image-space img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .button-row {
+            margin-top: 20px;
+        }
+
+        .disaster-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .disaster-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Echoes of Earth</h1>
+
+    <div class="slider-container">
+        <h2>Years:</h2>
+        <input type="range" id="yearSlider" min="2020" max="2100" value="2025" oninput="document.getElementById('yearVal').innerText = this.value">
+        <span id="yearVal">2025</span>
+    </div>
+
+    <div id="image-space">
+        {% if image_path %}
+            <img id="sat-image" src="{{ url_for('static', filename=image_path) }}" alt="Satellite view">
+        {% else %}
+            <div id="sat-image-placeholder">Satellite image will appear here</div>
+        {% endif %}
+    </div>
+
+    <div class="button-row">
+        {% for label in button_labels %}
+            <button class="disaster-btn" onclick="selectDisaster('{{ label }}')">{{ label }}</button>
+        {% endfor %}
+    </div>
+
+    <script>
+        function selectDisaster(name) {
+            fetch('/disaster', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disaster: name })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.image_path) {
+                    const imageSpace = document.getElementById('image-space');
+                    const timestamp = new Date().getTime(); // prevent caching
+                    const newImageUrl = `/static/${data.image_path}?t=${timestamp}`;
+
+                    let img = document.getElementById('sat-image');
+                    if (img) {
+                        img.src = newImageUrl;
+                    } else {
+                        imageSpace.innerHTML = `<img id=\"sat-image\" src=\"${newImageUrl}\" alt=\"Satellite view\">`;
+                    }
+                }
+                alert(`Image generated for: ${data.disaster}`);
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('There was an error generating the image.');
+            });
+        }
+    </script>
+</body>
+</html>

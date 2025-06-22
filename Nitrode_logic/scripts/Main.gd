@@ -83,8 +83,11 @@
 # 	print("Image clicked at position: ", position)
 
 # func _on_image_generated(tile_index, new_texture):
-# 	if ui.has_method("set_main_image"):
+# 	# If tile_index is 0 coming from Simulate, show it in the main UI.
+# 	if tile_index == 0:
 # 		ui.set_main_image(new_texture)
+# 	else:
+# 		world.update_tile_image(tile_index, new_texture)
 
 # # Legacy handlers for GameStateManager compatibility
 # func _on_tile_state_changed(tile_index, new_label):
@@ -157,7 +160,12 @@ func _on_action_selected(action_name, _tile_index):
 	get_node("/root/GameStateManager").apply_action(action_name, _selected_tile)
 
 func _on_image_generated(tile_index, new_texture):
-	world.update_tile_image(tile_index, new_texture)
+	# If tile_index is 0 coming from Simulate, show it in the main UI.
+	if tile_index == 0:
+		ui.set_main_image(new_texture)
+	else:
+		world.update_tile_image(tile_index, new_texture)
+		print("[Main] image_received tile=", tile_index, "tex=", new_texture)
 
 func _on_tile_state_changed(tile_index, new_label):
 	api_manager.request_tile_image(tile_index, new_label)
@@ -171,7 +179,13 @@ func _on_simulate_pressed(year:int, prompt:String) -> void:
 		push_warning("No disaster selected")
 		return
 	# tile_index isn't used on the stub – send 0
+	print("[Main] sending prompt ->", prompt)
 	api_manager.request_tile_image(0, prompt)
 
 #func _on_image_generated(_tile_index:int, tex:Texture2D) -> void:
 	#ui.set_main_image(tex)    # instantly swap the big image 
+
+func _on_simulate_button_pressed():
+	print("[UI] simulate_pressed year=%d prompt=%s" %
+		  [_current_year, _selected_disaster])
+	emit_signal("simulate_pressed", _current_year, _selected_disaster)
