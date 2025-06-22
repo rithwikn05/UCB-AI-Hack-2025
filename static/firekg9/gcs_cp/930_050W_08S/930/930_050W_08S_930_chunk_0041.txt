@@ -1,0 +1,1 @@
+DarkDenseForest/Woodland","location":"Coversmostoftheimagearea","size":"Approximately80-90%oftheimage"},{"name":"Cloudy/HazySky","location":"Upperportionsoftheimage","size":"Coversabout10-20%oftheimage"}],"man_made_features":[{"name":"FaintLinearPathway/Road","location":"Center-rightsideoftheimage","size":"Lessthan5%oftheimage,thinlinearfeature"}]}

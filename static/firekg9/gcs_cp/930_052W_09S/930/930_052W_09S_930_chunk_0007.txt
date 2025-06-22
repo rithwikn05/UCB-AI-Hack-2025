@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[{"name":"LinearClearings/LoggingPaths","location":"Crossingdiagonallyacrosstheforest","size":"Multiplenarrowlinearfeaturesspanningapproximately10-15%ofimagearea"}]}

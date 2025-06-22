@@ -1,0 +1,1 @@
+CompletelyDark/BlackImage","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[],"analysis_notes":"Theprovidedimageappearstobeentirelyblackordarkgreen,withnodiscerniblegeographicorman-madefeaturesvisible.Theimagemightbeanerror,acompletelydarkexposure,orablankplaceholderimage."}

@@ -1,0 +1,1 @@
+CloudFormation","location":"Scatteredthroughouttheimage,predominantlyinupperandmiddleregions","size":"Coversapproximately40%oftheimagearea"},{"name":"DarkTerrain","location":"Backgroundoftheimage","size":"Coversapproximately60%oftheimage"}],"man_made_features":[]}

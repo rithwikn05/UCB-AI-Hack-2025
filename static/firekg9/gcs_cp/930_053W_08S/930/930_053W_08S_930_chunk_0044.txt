@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimage","size":"Covers100%oftheimagearea"}],"man_made_features":[{"name":"SmallClearingorLoggingArea","location":"Bottomrightcorner","size":"Coversapproximately5%oftheimage"}]}

@@ -1,0 +1,1 @@
+CloudFormation","location":"Scatteredthroughouttheimage,withhigherconcentrationintopandbottomportions","size":"Coversapproximately40-50%oftheimagearea"},{"name":"DarkBackground(PossibleNightSkyorDenseTerrain)","location":"Entireimagebackground","size":"Coversapproximately50-60%oftheimagearea"}],"man_made_features":[]}

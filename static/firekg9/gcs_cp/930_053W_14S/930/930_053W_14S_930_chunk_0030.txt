@@ -1,0 +1,1 @@
+StripedTerrainPattern","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[],"image_characteristics":{"dominant_colors":["black","gray","white"],"pattern_type":"Horizontalstripedtexture","possible_interpretation":"Appearstobeadigitalartifact,scanlineerror,orabstractgeometricimagerepresentation"}}

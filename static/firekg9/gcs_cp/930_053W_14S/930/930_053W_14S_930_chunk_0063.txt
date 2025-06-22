@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimage","size":"Covers100%oftheimagearea"},{"name":"TerrainVariation","location":"Throughouttheimage","size":"Moderateundulatinglandscapewithvaryingshadesofdarkgreen"}],"man_made_features":[{"name":"LinearClearings","location":"Multiplethinlinestraversingtheforest","size":"Approximately5-10%ofimagearea,likelyloggingroadsorutilitycorridors"}]}

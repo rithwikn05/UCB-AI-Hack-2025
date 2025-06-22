@@ -1,0 +1,1 @@
+CloudFormation","location":"Predominantlycoverstherightsideandcenteroftheimage","size":"Occupiesapproximately60-70%oftheimagearea"},{"name":"CloudyAtmosphericLayer","location":"Entireimage,withvaryingdensity","size":"Covers100%oftheimagebackground"}],"man_made_features":[]}

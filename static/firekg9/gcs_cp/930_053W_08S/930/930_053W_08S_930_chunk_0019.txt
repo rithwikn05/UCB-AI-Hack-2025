@@ -1,0 +1,1 @@
+SolidDarkGreenBackground","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[],"analysis_notes":"Theimageappearstobeasoliddarkgreencolorwithnodiscerniblegeographicorman-madefeaturesvisible.Thiscouldbeaplaceholderimage,aprocessingerror,oranintentionallyuniformbackground."}

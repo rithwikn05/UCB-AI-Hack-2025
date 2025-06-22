@@ -1,0 +1,1 @@
+CloudFormation","location":"Scatteredthroughouttheimage","size":"Multiplecloudclusterscoveringapproximately40-50%oftheimage"},{"name":"DarkTerrain(PossiblyForestorVegetation)","location":"Backgroundoftheimage","size":"Coversroughly50-60%oftheimagearea"}],"man_made_features":[]}

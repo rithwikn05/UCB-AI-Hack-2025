@@ -1,0 +1,1 @@
+DenseForestorVegetationCover","location":"Entireimage","size":"100%oftheimagearea"},{"name":"IrregularTerrainPatterns","location":"Throughouttheimage","size":"Coversmostoftheimagearea"},{"name":"GreenGradientLandscape","location":"Entireimage","size":"100%oftheimage"},{"name":"TexturedVegetationSurface","location":"Allregions","size":"Entireimage"}],"man_made_features":[]}

@@ -1,0 +1,1 @@
+DarkGreenForest/Vegetation","location":"Entireimagearea","size":"100%ofimagecoverage"}],"man_made_features":[],"analysis_notes":"Theimageappearstobeauniformdarkgreencolor,suggestingadenseforestorvegetationareawithnodiscernibleindividualfeaturesorman-madestructuresvisible."}

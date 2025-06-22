@@ -1,0 +1,1 @@
+AgriculturalFields","location":"Entireimage","size":"Covers100%oftheimagearea"},{"name":"CropRows","location":"Horizontalstripesacrosstheentireimage","size":"Multipleparallelrowsspanningthefullwidthoftheimage"}],"man_made_features":[{"name":"CultivatedFarmland","location":"Fullimageframe","size":"Completelyfillstheimage"}]}

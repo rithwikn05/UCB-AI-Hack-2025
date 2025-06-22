@@ -1,0 +1,1 @@
+DenseForestorWoodland","location":"Entirerightsideandbottomoftheimage","size":"Coversapproximately70-80%oftheimagearea"}],"man_made_features":[{"name":"LinearInfrastructure(PossiblyRoadorPowerLine)","location":"Leftsideoftheimage","size":"Appearsasmultiplewhite/lighthorizontallinesspanningthefullheightoftheleft20%oftheimage"}]}

@@ -1,0 +1,1 @@
+CloudFormation","location":"Entireimage","size":"100%ofimagecoverage"}],"man_made_features":[],"analysis_notes":"Theimageappearstobeasatelliteoraerialviewofcloudformationsagainstadarkbackground.Thecloudsarewhiteandfluffy,scatteredacrossthedarksurfacewithvaryingdensityandirregularshapes.Therearenodiscerniblegeographicorman-madefeaturesbeneaththecloudcover."}

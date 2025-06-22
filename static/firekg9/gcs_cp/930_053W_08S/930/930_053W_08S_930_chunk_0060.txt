@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimagearea","size":"Covers100%oftheimage"}],"man_made_features":[{"name":"FaintRoadorTrail","location":"Diagonallycrossingtheimagefromtop-lefttobottom-right","size":"Approximately2-3%ofimagearea"}]}

@@ -1,0 +1,1 @@
+SolidDarkGreenBackground","location":"EntireImage","size":"100%oftheimage"}],"man_made_features":[{"name":"NoVisibleFeatures","location":"N/A","size":"N/A"}]}

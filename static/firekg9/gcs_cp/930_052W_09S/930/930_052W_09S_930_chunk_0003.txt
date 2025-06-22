@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimage","size":"100%oftheimagearea"}],"man_made_features":[]}

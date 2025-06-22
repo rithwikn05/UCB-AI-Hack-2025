@@ -1,0 +1,1 @@
+CloudFormation","location":"Scatteredthroughouttheentireimage","size":"Coversapproximately40-50%oftheimagearea"},{"name":"DarkAtmosphericBackground","location":"Entireimage","size":"Dominates50-60%oftheimage"}],"man_made_features":[]}

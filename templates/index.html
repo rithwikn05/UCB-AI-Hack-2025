@@ -59,28 +59,32 @@
         .disaster-btn:hover {
             background-color: #2980b9;
         }
+
+        .description {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: #34495e;
+        }
     </style>
 </head>
 <body>
 
     <h1>Echoes of Earth</h1>
 
-    <div class="slider-container">
-        <h2>Years:</h2>
-        <input type="range" id="yearSlider" min="2020" max="2100" value="2025" oninput="document.getElementById('yearVal').innerText = this.value">
-        <span id="yearVal">2025</span>
-    </div>
-
     <div id="image-space">
         {% if image_path %}
-            <img id="sat-image" src="{{ url_for('static', filename=image_path) }}" alt="Satellite view">
+            <img id="sat-image" src="{{ image_path }}" alt="Satellite view">
         {% else %}
             <div id="sat-image-placeholder">Satellite image will appear here</div>
         {% endif %}
     </div>
 
+    {% if sentence_path %}
+        <div class="description"><strong>Scenario:</strong> {{ sentence_path }}</div>
+    {% endif %}
+
     <div class="button-row">
-        {% for label in button_labels %}
+        {% for label in buttons %}
             <button class="disaster-btn" onclick="selectDisaster('{{ label }}')">{{ label }}</button>
         {% endfor %}
     </div>
@@ -94,23 +98,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.image_path) {
-                    const imageSpace = document.getElementById('image-space');
-                    const timestamp = new Date().getTime(); // prevent caching
-                    const newImageUrl = `/static/${data.image_path}?t=${timestamp}`;
-
-                    let img = document.getElementById('sat-image');
-                    if (img) {
-                        img.src = newImageUrl;
-                    } else {
-                        imageSpace.innerHTML = `<img id=\"sat-image\" src=\"${newImageUrl}\" alt=\"Satellite view\">`;
-                    }
-                }
-                alert(`Image generated for: ${data.disaster}`);
+                alert(`Disaster selected: ${data.disaster}`);
             })
             .catch(err => {
                 console.error('Error:', err);
-                alert('There was an error generating the image.');
+                alert('There was an error processing the disaster.');
             });
         }
     </script>

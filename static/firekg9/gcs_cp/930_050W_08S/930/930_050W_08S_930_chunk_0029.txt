@@ -1,0 +1,1 @@
+CloudCover","location":"Scatteredthroughouttheimage","size":"Approximately30-40%oftheimagecoveredbywhite/light-coloredcloudformations"},{"name":"DarkTerrain","location":"Entirebackgroundoftheimage","size":"Coversapproximately60-70%oftheimagearea"}],"man_made_features":[]}

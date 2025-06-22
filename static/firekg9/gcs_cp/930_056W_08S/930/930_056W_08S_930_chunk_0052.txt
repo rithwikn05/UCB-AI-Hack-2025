@@ -1,0 +1,1 @@
+DenseVegetation/Forest","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[],"image_characteristics":{"dominant_color":"Brightgreen","texture":"Mottledandslightlyvariegatedgreensurface","overall_appearance":"Uniformforestorvegetationcoverwithsubtlevariationsingreenintensity"}}

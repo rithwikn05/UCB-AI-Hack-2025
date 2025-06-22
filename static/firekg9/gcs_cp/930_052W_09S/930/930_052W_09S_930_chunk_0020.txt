@@ -1,0 +1,1 @@
+DenseForest","location":"Entireimage","size":"100%ofimagearea"}],"man_made_features":[],"image_analysis_notes":"Theimageappearstobeauniformdarkgreentextureresemblingadenseforestortreecanopy,withhorizontalwhitestripingthatcouldbeartifactsfromsatelliteimagingordataprocessing.Nodistinctindividualfeaturesareclearlydiscernible."}

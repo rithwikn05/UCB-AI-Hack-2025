@@ -1,0 +1,1 @@
+DarkForest/WoodlandArea","location":"Entireimagebackground","size":"Coversapproximately90-95%oftheimage"}],"man_made_features":[{"name":"SmallClearedAreas/Structures","location":"Scatteredinsmallclustersalongrightsideandbottom-rightcornerofimage","size":"Occupyapproximately5-10%oftotalimagearea"}]}
