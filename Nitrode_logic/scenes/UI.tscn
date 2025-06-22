@@ -1,65 +1,85 @@
-[gd_scene load_steps=2 format=3 uid="uid://buj38a0oe1cud"]
+[gd_scene load_steps=2 format=3 uid="uid://blyou0rtxpd3c"]
 
 [ext_resource type="Script" path="res://scripts/UI.gd" id="1"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1")
 
-[node name="UI#MarginContainer" type="MarginContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="MarginContainer#VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Title" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Echoes of the Earth"
+horizontal_alignment = 1
 
-[node name="MarginContainer_VBoxContainer#GlobalStatsPanel" type="PanelContainer" parent="."]
+[node name="YearHBox" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+alignment = 1
+
+[node name="MainImage" type="TextureRect" parent="VBox"]
+modulate = Color(0.1, 0.1, 0.1, 1)
+custom_minimum_size = Vector2(800, 450)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 2
+
+[node name="DisasterButtons" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+alignment = 1
+
+[node name="SimulateButton" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Simulate"
 
 [node name="YearLabel" type="Label" parent="."]
-anchors_preset = -1
-anchor_bottom = 0.022
-offset_left = 150.0
-offset_top = 221.0
-offset_right = 203.0
-offset_bottom = 229.744
-text = "Year: 0"
+offset_left = 27.0
+offset_top = 35.0
+offset_right = 107.0
+offset_bottom = 58.0
+text = "Year: 2024"
 
-[node name="HealthScoreLabel" type="Label" parent="."]
-offset_left = 477.0
-offset_top = 391.0
-offset_right = 578.0
-offset_bottom = 414.0
-text = "Health: 100.0"
+[node name="YearSlider" type="HSlider" parent="."]
+offset_left = 127.0
+offset_top = 42.0
+offset_right = 660.0
+offset_bottom = 58.0
+size_flags_horizontal = 3
+min_value = 2020.0
+max_value = 2100.0
+value = 2024.0
 
-[node name="CO2LevelLabel" type="Label" parent="."]
-offset_left = 399.0
-offset_top = 500.0
-offset_right = 520.0
-offset_bottom = 523.0
-text = "CO2: 400.0 ppm"
+[node name="DisasterButtons#EarthquakeButton" type="Button" parent="."]
+offset_left = 608.0
+offset_top = 522.0
+offset_right = 706.0
+offset_bottom = 553.0
+text = "Earthquake"
 
-[node name="MarginContainer_VBoxContainer#ActionPanel" type="PanelContainer" parent="."]
+[node name="DisasterButtons#FloodButton" type="Button" parent="."]
+offset_left = 532.0
+offset_top = 520.0
+offset_right = 583.0
+offset_bottom = 551.0
+text = "Flood"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="DisasterButtons#FireButton" type="Button" parent="."]
+offset_left = 437.0
+offset_top = 522.0
+offset_right = 506.0
+offset_bottom = 553.0
+text = "Wildfire"
 
-[node name="ReforestButton" type="Button" parent="."]
-offset_left = 722.0
-offset_top = 197.0
-offset_right = 796.0
-offset_bottom = 228.0
-text = "Reforest"
-
-[node name="MarginContainer_VBoxContainer#EventPanel" type="PanelContainer" parent="."]
-
-[node name="MarginContainer_VBoxContainer_EventPanel#EventTitleLabel" type="Label" parent="."]
-offset_left = 233.0
-offset_top = 167.0
-offset_right = 314.0
-offset_bottom = 190.0
-text = "Event Title"
-
-[node name="MarginContainer_VBoxContainer_EventPanel#EventDescriptionLabel" type="Label" parent="."]
-offset_left = 373.0
-offset_top = 83.0
-offset_right = 547.0
-offset_bottom = 106.0
-text = "Event description here"
+[node name="DisasterButtons#StormButton" type="Button" parent="."]
+offset_left = 347.0
+offset_top = 523.0
+offset_right = 403.0
+offset_bottom = 554.0
+text = "Storm"
