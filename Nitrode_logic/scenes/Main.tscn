@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Main.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://nsoyqrph44gg" path="res://scenes/World.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://buj38a0oe1cud" path="res://scenes/UI.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://blyou0rtxpd3c" path="res://scenes/UI.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/APIManager.tscn" id="4"]
 
 [node name="Main" type="Node"]
@@ -14,6 +14,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 offset_right = 93.0
 offset_bottom = 37.0
+grow_horizontal = 1
+grow_vertical = 1
 grid_size = 15
 
 [node name="UI" parent="." instance=ExtResource("3")]

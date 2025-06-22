@@ -142,7 +142,8 @@ if __name__ == "__main__":
     try:
         # Authenticate with Hugging Face
         # HF_TOKEN = "hf_your_token_here"  # ← REPLACE with your actual HF token
-        login(token=os.HF_TOKEN)
+        hf_token = os.environ.get("HF_TOKEN")
+        login(token=hf_token)
         
         # Download model weights
         print("📥 Downloading model weights...")
@@ -150,7 +151,7 @@ if __name__ == "__main__":
             repo_id="Djrango/Qwen2vl-Flux",
             allow_patterns="*.safetensors",
             local_dir="./models/qwen2vl-flux",
-            token=os.HF_TOKEN  # Pass token explicitly
+            token=hf_token  # Pass token explicitly
         )
         
         # Mount GCS bucket
@@ -161,7 +162,7 @@ if __name__ == "__main__":
         
         # Paths
         PRETRAINED_MODEL = "./models/qwen2vl-flux"
-        IMAGE_FOLDER = mounted_path
+        IMAGE_FOLDER = "/test_images"
         OUTPUT_FOLDER = "./output"
         LOGGING_FOLDER = "./logs"
         MODEL_OUTPUT_NAME = "my_custom_lora_v1"  # ← CHANGE THIS to name your LoRA model
@@ -180,9 +181,11 @@ if __name__ == "__main__":
         LORA_ALPHA = 32
         OPTIMIZER = "adamw8bit"
         
+        SCRIPT_PATH = os.path.join("sd-scripts", "train_network.py")
+        
         # Build command
         command = [
-            sys.executable, "train_network.py",
+            sys.executable, SCRIPT_PATH,
             "--pretrained_model_name_or_path", PRETRAINED_MODEL,
             "--train_data_dir", IMAGE_FOLDER,
             "--output_dir", OUTPUT_FOLDER,
@@ -196,7 +199,6 @@ if __name__ == "__main__":
             "--save_precision", params['precision'],
             "--learning_rate", str(LEARNING_RATE),
             "--lr_scheduler", LR_SCHEDULER,
-            "--lr_warmup_ratio", str(LR_WARMUP),
             "--network_module", "networks.lora",
             "--network_dim", str(LORA_RANK),
             "--network_alpha", str(LORA_ALPHA),

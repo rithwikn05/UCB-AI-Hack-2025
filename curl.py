@@ -362,7 +362,7 @@ def process_tifs_parallel(tif_paths, max_workers=None, use_threads=True):
 # ------------------------- MAIN EXECUTION -------------------------
 if __name__ == "__main__":
     # 1. constants
-    INTERVALS = list(range(392, 1012))        # 16-day periods to fetch
+    INTERVALS = list(range(392, 394))        # 16-day periods to fetch
 
     calculate_chunk_info(CHUNK_LENGTH)
 

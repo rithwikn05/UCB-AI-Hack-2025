@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import base64
+import os
 from pathlib import Path
+import replicate
 
 app = FastAPI()
 
@@ -9,21 +11,40 @@ class GenerateRequest(BaseModel):
     tile_index: int
     label: str
 
-# Load a tiny placeholder png (64x64 gray square) once.
-PLACEHOLDER_PNG_PATH = Path(__file__).with_name("placeholder.png")
-if not PLACEHOLDER_PNG_PATH.exists():
-    # Create one on the fly if missing.
-    from PIL import Image
-    img = Image.new("RGB", (64, 64), (128, 128, 128))
-    img.save(PLACEHOLDER_PNG_PATH)
-with open(PLACEHOLDER_PNG_PATH, "rb") as f:
-    PLACEHOLDER_B64 = base64.b64encode(f.read()).decode()
+# ------------------------------------------------------------------
+# Utility: run Stable Diffusion via Replicate and return PNG bytes
+# ------------------------------------------------------------------
+MODEL_ID = "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
+
+async def generate_sd_image(prompt: str) -> bytes:
+    """Call Replicate to create an image and return raw PNG bytes."""
+    full_prompt = f"an aerial view of a landscape that has been affected by {prompt}. Make it zoom out and realistic."
+
+    # Blocking call, but fine for a stub API; could move to threadpool if needed.
+    output = replicate.run(MODEL_ID, input={"prompt": full_prompt, "scheduler": "K_EULER"})
+
+    # 'output' is an iterator of file-like objects (or URLs). Grab first.
+    first_item = next(iter(output))
+
+    if hasattr(first_item, "read"):
+        img_bytes = first_item.read()
+    else:
+        # item is URL string: download
+        import requests
+        img_bytes = requests.get(first_item).content
+    return img_bytes
 
 @app.post("/generate")
 async def generate(req: GenerateRequest):
-    # In real life you'd call your diffusion model here.
-    # We just return the placeholder.
+    """Generate an image conditioned on the provided label and return base64 PNG."""
+    try:
+        img_bytes = await generate_sd_image(req.label)
+        img_b64 = base64.b64encode(img_bytes).decode()
+    except Exception as e:
+        # On failure, return an error message instead of crashing server
+        return {"error": str(e)}
+
     return {
         "tile_index": req.tile_index,
-        "image": PLACEHOLDER_B64,
+        "image": img_b64,
     } 
