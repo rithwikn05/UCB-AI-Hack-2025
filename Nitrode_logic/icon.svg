@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 91.4 91.4">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-5 {
+        fill: #282828;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="22" y1="24.3" x2="22" y2="65.5" gradientTransform="translate(0 94) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#007864"/>
+      <stop offset="1" stop-color="#43957a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="52.7" y1="49.5" x2="18.7" y2="70" gradientTransform="translate(0 94) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b9d80"/>
+      <stop offset="1" stop-color="#4eb591"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="72.5" y1="60.9" x2="38.4" y2="81.4" gradientTransform="translate(0 94) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b9d80"/>
+      <stop offset="1" stop-color="#4eb591"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="60.5" y1="14.1" x2="60.5" y2="65.4" gradientTransform="translate(0 94) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#008e78"/>
+      <stop offset="1" stop-color="#5ebf99"/>
+    </linearGradient>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.4, SVG Export Plug-In . SVG Version: 1.2.0 Build 166)  -->
+  <g>
+    <g id="Layer_1">
+      <g id="Layer_1-2" data-name="Layer_1">
+        <rect class="cls-5" width="91.4" height="91.4" rx="10.9" ry="10.9"/>
+        <g>
+          <polygon class="cls-4" points="16 28.5 16 62.8 28 69.7 28 35.5 16 28.5"/>
+          <polygon class="cls-3" points="16 28.5 45.6 45.7 55.5 40 25.8 22.9 16 28.5"/>
+          <polygon class="cls-2" points="35.7 17.2 65.4 34.3 75.2 28.6 45.6 11.5 35.7 17.2"/>
+          <polygon class="cls-1" points="45.6 45.7 45.6 79.9 75.3 62.8 75.2 28.6 65.4 34.3 65.4 57.5 55.5 63.2 55.5 40 45.6 45.7"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
