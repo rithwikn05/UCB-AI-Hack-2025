@@ -12,7 +12,7 @@ import shutil
 from pydantic import BaseModel
 
 app = Flask(__name__)
-GOOGLE_API_KEY='AIzaSyA2_Vvj0cDn0Ldczxc9HsvuwHMLHdmQsd8'
+GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 latitude = None
 longitude = None
 label_path = None

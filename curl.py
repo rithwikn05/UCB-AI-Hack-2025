@@ -13,6 +13,10 @@ from google.cloud import storage   # ↳ pip install google-cloud-storage
 from typing import Iterable, Union
 from multiprocessing import Pool, cpu_count
 from multiprocessing.pool import ThreadPool
+import os
+from requests.adapters import HTTPAdapter
+from requests.auth import HTTPBasicAuth
+from urllib3.util.retry import Retry
 
 # -------------------------- GLOBAL CONFIG --------------------------
 # (set these before any function definitions so they are available
@@ -150,39 +154,88 @@ def calculate_chunk_info(chunk_length):
     
     return True
 
-def download_tif(lat, tile, interval, outfolder, outfile):
+def download_tif(lat, tile, interval, outfolder, outfile, max_retries=3):
+    import time
+    import sys
+    
     username = "glad"
     password = "ardpas"
-import rasterio
-import numpy as np
-from pathlib import Path
-from imageio import imwrite   # or from PIL import Image
-
-def download_tif(lat, tile, interval):
-    username = "glad"
-    password = "ardpas"
-
-    lat = "13N"  # example
-    tile = "105E_13N"
-    interval = "920"
-    outfolder = "/Users/anikait/Downloads"
-    outfile = f"{outfolder}/{interval}.tif"
-
     url = f"https://glad.umd.edu/dataset/glad_ard2/{lat}/{tile}/{interval}.tif"
+    temp_file = f"{outfile}.downloading"
+    
+    # Configure retry strategy
+    retry_strategy = Retry(
+        total=max_retries,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"]
+    )
+    
+    session = requests.Session()
+    session.mount('https://', HTTPAdapter(max_retries=retry_strategy))
 
-    response = requests.get(url, auth=HTTPBasicAuth(username, password), stream=True)
-
-    if response.status_code == 200:
-        with open(outfile, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print(f"Downloaded: {outfile}")
-
-        # Optional: use the local `extract_bands` helper (defined below)
-        bands, meta = extract_bands(outfile)
-        # e.g. compute NDVI, statistics, etc. as needed
-    else:
-        print(f"Failed with status code {response.status_code}: {response.text}")
+    try:
+        # Create parent directories if they don't exist
+        os.makedirs(os.path.dirname(outfile), exist_ok=True)
+        
+        # If temp file exists from a previous failed download, remove it
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+            
+        with session.get(
+            url,
+            auth=HTTPBasicAuth(username, password),
+            stream=True,
+            timeout=60  # 60 seconds timeout
+        ) as response:
+            response.raise_for_status()  # Raise HTTPError for bad responses
+            
+            # Get total size for progress tracking (if available)
+            total_size = int(response.headers.get('content-length', 0))
+            downloaded_size = 0
+            start_time = time.time()
+            
+            with open(temp_file, 'wb') as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        downloaded_size += len(chunk)
+                        
+                        # Print download progress
+                        if total_size > 0:
+                            percent = (downloaded_size / total_size) * 100
+                            elapsed = time.time() - start_time
+                            speed = downloaded_size / (1024 * 1024 * elapsed) if elapsed > 0 else 0
+                            sys.stdout.write(f"\rDownloading {os.path.basename(outfile)}: {percent:.1f}% ({speed:.1f} MB/s)")
+                            sys.stdout.flush()
+            
+            # Rename temp file to final filename (atomic operation)
+            if os.path.exists(outfile):
+                os.remove(outfile)
+            os.rename(temp_file, outfile)
+            
+            print(f"\rDownloaded: {outfile} ({downloaded_size/1024/1024:.1f} MB)")
+            
+            # Verify the file is a valid TIFF
+            try:
+                bands, meta = extract_bands(outfile)
+                print(f"{os.path.basename(outfile)}: {len(bands)} band(s) {bands[0].shape[0]}×{bands[0].shape[1]}, dtype={bands[0].dtype}")
+                return True
+            except Exception as e:
+                print(f"\nWarning: Downloaded file appears to be corrupted: {e}")
+                if os.path.exists(outfile):
+                    os.remove(outfile)
+                return False
+                
+    except requests.exceptions.RequestException as e:
+        print(f"\nError downloading {url}: {e}")
+        # Clean up any partial downloads
+        if os.path.exists(temp_file):
+            try:
+                os.remove(temp_file)
+            except:
+                pass
+        return False
 
 def extract_bands(tif_path):
     """
@@ -236,7 +289,7 @@ def save_rgb(
     # ------------------------------------------------------------------
     # 2.  If the image is effectively empty (all 0 or constant), skip
     # ------------------------------------------------------------------
-    if np.all(rgb8 == rgb8.flat[0]):
+    if np.count_nonzero(rgb8) < len(rgb8) * len(rgb8[0]) * 0.9:
         # constant image → likely no data / fully cloud-masked
         print(f"⬛  {tif_path.name} appears empty – skipping tile")
         return False
@@ -376,7 +429,8 @@ def process_tifs_parallel(tif_paths, max_workers=None, use_threads=True):
 # ------------------------- MAIN EXECUTION -------------------------
 if __name__ == "__main__":
     # 1. constants
-    INTERVALS = list(range(392, 394))        # 16-day periods to fetch
+    # INTERVALS = list(range(680, 688))        # 16-day periods to fetch  MAYBE REVIST
+    INTERVALS = list(range(930, 938))
 
     calculate_chunk_info(CHUNK_LENGTH)
 
@@ -401,9 +455,10 @@ if __name__ == "__main__":
             for lon in lon_iter:
                 lon_label = f"{abs(lon):03d}{'E' if lon >= 0 else 'W'}"  # e.g. 105E
                 tile_name = f"{lon_label}_{lat_label}"                 # 105E_13N
+                folder_name = f"{interval}_{tile_name}"
 
                 # Folder in ~/Downloads to hold transient files for this tile
-                work_dir = Path.home() / "Downloads" / tile_name
+                work_dir = Path.home() / "SatelliteImages" / folder_name
                 work_dir.mkdir(parents=True, exist_ok=True)
                 processed_dirs.append(work_dir)
 
@@ -426,7 +481,7 @@ if __name__ == "__main__":
 
     if download_jobs:
         print(f"Starting {len(download_jobs)} downloads in parallel …")
-        with ThreadPool(processes=32) as tp:
+        with ThreadPool(processes = 125) as tp:
             dl_results = tp.map(_dl_job, download_jobs)
 
     # Build list of TIFFs actually downloaded
@@ -434,7 +489,7 @@ if __name__ == "__main__":
 
     # ---------------- PARALLEL PIPELINE ----------------
     if all_tifs:
-        results = process_tifs_parallel(all_tifs, max_workers=32, use_threads=True)
+        results = process_tifs_parallel(all_tifs, max_workers=cpu_count()-4, use_threads=False)
         print("results: ", results)
         ok = sum(1 for r in results if r["status"] == "uploaded")
         print(f"\n✅ Parallel pipeline finished: {ok}/{len(results)} tiles uploaded")
