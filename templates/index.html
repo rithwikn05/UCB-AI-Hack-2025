@@ -54,10 +54,16 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .disaster-btn:hover {
             background-color: #2980b9;
+        }
+
+        .disaster-btn.selected {
+            background-color: #e74c3c;
+            transform: scale(1.05);
         }
 
         .description {
@@ -72,8 +78,8 @@
     <h1>Echoes of Earth</h1>
 
     <div id="image-space">
-        {% if image_path %}
-            <img id="sat-image" src="{{ image_path }}" alt="Satellite view">
+        {% if image_url %}
+            <img id="sat-image" src="{{ image_url }}" alt="Satellite view">
         {% else %}
             <div id="sat-image-placeholder">Satellite image will appear here</div>
         {% endif %}
@@ -84,25 +90,80 @@
     {% endif %}
 
     <div class="button-row">
-        {% for label in buttons %}
-            <button class="disaster-btn" onclick="selectDisaster('{{ label }}')">{{ label }}</button>
+        {% for label in button_labels %}
+          <button class="disaster-btn" onclick="handleDisaster('{{ label }}', this)">{{ label }}</button>
         {% endfor %}
+      </div>
+      
+      <script>
+      function handleDisaster(disasterName, buttonElement) {
+          // Call your JS function with the button element
+          selectDisaster(disasterName, buttonElement);
+      
+          // Add a small delay before redirect to allow visual feedback
+          setTimeout(() => {
+              window.location.href = `/trigger/${encodeURIComponent(disasterName)}`;
+          }, 200);
+      }
+      </script>
+      
+
+    <div class="button-row" style="margin-top: 30px;">
+        <button id="simulate-btn" class="disaster-btn" style="background-color: #27ae60; font-size: 18px; padding: 15px 30px;" onclick="simulateDisaster()" disabled>
+            Simulate Disaster
+        </button>
+    </div>
+
+    <div id="selected-disaster" style="margin-top: 20px; font-size: 18px; color: #2c3e50;">
+        <strong>Selected:</strong> <span id="disaster-name">None</span>
     </div>
 
     <script>
-        function selectDisaster(name) {
+        let selectedDisaster = null;
+
+        function selectDisaster(name, buttonElement) {
+            // Remove selected class from all buttons
+            document.querySelectorAll('.disaster-btn').forEach(btn => {
+                if (btn !== document.getElementById('simulate-btn')) {
+                    btn.classList.remove('selected');
+                }
+            });
+            
+            // Add selected class to clicked button
+            buttonElement.classList.add('selected');
+            
+            // Store the selected disaster
+            selectedDisaster = name;
+            
+            // Update the display
+            document.getElementById('disaster-name').textContent = name;
+            
+            // Enable the simulate button
+            document.getElementById('simulate-btn').disabled = false;
+            
+            console.log('Selected disaster:', selectedDisaster);
+        }
+
+        function simulateDisaster() {
+            if (!selectedDisaster) {
+                alert('Please select a disaster prevention technique first!');
+                return;
+            }
+
+            // Send the selected disaster to the backend
             fetch('/disaster', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ disaster: name })
+                body: JSON.stringify({ disaster: selectedDisaster })
             })
             .then(response => response.json())
             .then(data => {
-                alert(`Disaster selected: ${data.disaster}`);
+                alert(`Simulating: ${data.disaster}`);
+                // Here you can add code to show simulation results
             })
             .catch(err => {
                 console.error('Error:', err);
-                alert('There was an error processing the disaster.');
+                alert('There was an error processing the simulation.');
             });
         }
     </script>
