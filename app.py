@@ -256,6 +256,29 @@ def disaster():
     # Simply return the disaster type for now; no image generation
     return jsonify({"status": "received", "disaster": disaster_type})
 
+@app.route('/new-image', methods=['POST'])
+def new_image():
+    global latitude, longitude, label_path, image_path
+    
+    try:
+        # Remove any existing generated image to force showing a new random one
+        generated_image_path = os.path.join(app.root_path, "static", "gemini_output.png")
+        if os.path.exists(generated_image_path):
+            os.remove(generated_image_path)
+            print("Removed existing generated image")
+        
+        # Reset global variables to force new selection
+        globals()['latitude'] = None
+        globals()['longitude'] = None
+        globals()['label_path'] = None
+        globals()['image_path'] = None
+        
+        return jsonify({"status": "success", "message": "New image will be loaded"})
+        
+    except Exception as e:
+        print(f"Error in new_image route: {e}")
+        return jsonify({"status": "error", "message": str(e)})
+
 @app.route('/trigger/<disaster_name>')
 def trigger_disaster(disaster_name):
     global latitude, longitude, label_path, image_path
@@ -300,6 +323,8 @@ def trigger_disaster(disaster_name):
             output_path=output_path
         )
 
+        print(simulation_description)
+
         # Update the global image_path to point to the new generated image
         globals()['image_path'] = output_path
         
@@ -317,4 +342,4 @@ def trigger_disaster(disaster_name):
         })
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)

@@ -100,10 +100,18 @@
           // Call your JS function with the button element
           selectDisaster(disasterName, buttonElement);
       
-          // Add a small delay before redirect to allow visual feedback
+          // Use a longer delay and try-catch to handle extension conflicts
           setTimeout(() => {
-              window.location.href = `/trigger/${encodeURIComponent(disasterName)}`;
-          }, 200);
+              try {
+                  window.location.href = `/trigger/${encodeURIComponent(disasterName)}`;
+              } catch (e) {
+                  console.warn('Navigation error (likely extension conflict):', e);
+                  // Fallback: try again after a short delay
+                  setTimeout(() => {
+                      window.location.href = `/trigger/${encodeURIComponent(disasterName)}`;
+                  }, 100);
+              }
+          }, 300);
       }
       </script>
       
@@ -111,6 +119,9 @@
     <div class="button-row" style="margin-top: 30px;">
         <button id="simulate-btn" class="disaster-btn" style="background-color: #27ae60; font-size: 18px; padding: 15px 30px;" onclick="simulateDisaster()" disabled>
             Simulate Disaster
+        </button>
+        <button id="new-image-btn" class="disaster-btn" style="background-color: #9b59b6; font-size: 18px; padding: 15px 30px;" onclick="getNewImage()">
+            New Image
         </button>
     </div>
 
@@ -164,6 +175,37 @@
             .catch(err => {
                 console.error('Error:', err);
                 alert('There was an error processing the simulation.');
+            });
+        }
+
+        function getNewImage() {
+            // Show loading state
+            const newImageBtn = document.getElementById('new-image-btn');
+            newImageBtn.disabled = true;
+            newImageBtn.textContent = 'Loading...';
+
+            // Request a new random image from the backend
+            fetch('/new-image', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Reload the page to show the new image and buttons
+                    window.location.reload();
+                } else {
+                    alert('Error loading new image: ' + (data.message || 'Unknown error'));
+                    // Reset button
+                    newImageBtn.disabled = false;
+                    newImageBtn.textContent = 'New Image';
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('There was an error loading a new image.');
+                // Reset button
+                newImageBtn.disabled = false;
+                newImageBtn.textContent = 'New Image';
             });
         }
     </script>
